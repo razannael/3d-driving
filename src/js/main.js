@@ -1,12 +1,19 @@
 import * as THREE from 'three';
 import * as YUKA from 'yuka';
 import gsap from 'gsap';
+import { GLTFLoader } from 'three/examples/jsm/Addons.js';
+import { DRACOLoader } from 'three/examples/jsm/Addons.js';
+
 
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-renderer
+
+// set the color of the background
+renderer.setClearColor(0x94DBFB);
+
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
     45,
@@ -17,16 +24,31 @@ const camera = new THREE.PerspectiveCamera(
 
 
 // Camera positioning
-camera.position.set(6, 8, 14);
-orbit.update();
+camera.position.set(3, 10,218);
+camera.lookAt(scene.position);
 
-// Sets a 12 by 12 gird helper
-const gridHelper = new THREE.GridHelper(12, 12);
-scene.add(gridHelper);
 
-// Sets the x, y, and z axes with each having a length of 4
-const axesHelper = new THREE.AxesHelper(4);
-scene.add(axesHelper);
+const ambientLight = new THREE.AmbientLight(0xE1E1E1, 0.3);
+scene.add(ambientLight);
+
+const hemisphereLight = new THREE.HemisphereLight(0x94D8FB, 0x9CFF2E, 0.3);
+scene.add(hemisphereLight);
+
+const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.7);
+scene.add(directionalLight);
+
+renderer.outputEncoding = THREE.sRGBEncoding; // for gamma correction
+
+const loader = new GLTFLoader();
+const dLoader = new DRACOLoader();
+dLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+dLoader.setDecoderConfig({type: 'js'});
+loader.setDRACOLoader(dLoader);
+
+loader.load('../../static/terrain.glb', (glb)=>{
+    const model = glb.scene;
+    scene.add(model);
+});
 
 function animate() {
     renderer.render(scene, camera);

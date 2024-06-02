@@ -6,6 +6,10 @@ import { DRACOLoader } from 'three/examples/jsm/Addons.js';
 import * as skeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { BLUEVEHICLESPATHS, REDVEHICLESPATHS, YELLOWVEHICLESPATHS } from './constants';
 
+const progressBar = document.getElementById('progress-bar');
+const progressBarContainer = document.querySelector('.progress-bar-container');
+const loadingManager = new THREE.LoadingManager();
+
 const entityManager = new YUKA.EntityManager();
 
 const renderer = new THREE.WebGLRenderer({antialias: true});
@@ -42,7 +46,15 @@ scene.add(directionalLight);
 
 renderer.outputEncoding = THREE.sRGBEncoding; // for gamma correction
 
-const loader = new GLTFLoader();
+loadingManager.onProgress = function (url, loaded, total) {
+    progressBar.value = (loaded / total) * 100;
+};
+
+loadingManager.onLoad = function () {
+    progressBarContainer.style.display = 'none';
+};
+
+const loader = new GLTFLoader(loadingManager);
 const dLoader = new DRACOLoader();
 dLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
 dLoader.setDecoderConfig({type: 'js'});

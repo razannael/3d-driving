@@ -35,6 +35,7 @@ const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+let clicked = false; // to track if user has clicked an option
 
 // set the color of the background
 renderer.setClearColor(0x94DBFB);
@@ -151,6 +152,8 @@ loader.load('../../static/blue.glb', (glb)=>{
     const v5 = createCar(model, BLUEVEHICLESPATHS[4], entityManager, Math.PI);
 });
 
+
+
 //gsap timeline
 startbtn.addEventListener('mousedown', ()=>{
      const t1 = gsap.timeline();
@@ -170,17 +173,17 @@ startbtn.addEventListener('mousedown', ()=>{
         duration: 4,
      },0).to(question,{
         autoAlpha: 1,
-        duration: 0.2,
+        duration: 0.1,
      },'+=0.7').to(option1,{
          rotateX: 0,
-         duration: 0.2,
-     },'+=2.5').to(option2,{
+         duration: 0.1,
+     },'+=2').to(option2,{
          rotateX: 0,
-         duration: 0.2,
-     },'+=2.4').to(option3,{
+         duration: 0.1,
+     },'+=2').to(option3,{
          rotateX: 0,
-         duration: 0.2,
-     },'+=2.4')
+         duration: 0.1,
+     },'+=2')
 });
 
 
@@ -216,6 +219,32 @@ loader.load('../../static/arrow.glb', (glb)=>{
     createArrow(new THREE.Vector3(98.08, 2, 14.95));
     createArrow(new THREE.Vector3(93.599, 2, -70.83), Math.PI);
     createArrow(new THREE.Vector3(-88.88, 2, -160.78), Math.PI);});
+
+
+const showAnswerSymbol = (opt1, opt2, opt3)=>{
+    option1Symbol.style.backgroundImage = `url(../../static/symbols/${opt1}.png)`;
+    option2Symbol.style.backgroundImage = `url(../../static/symbols/${opt2}.png)`;
+    option3Symbol.style.backgroundImage = `url(../../static/symbols/${opt3}.png)`;
+}
+
+const chooseAnswer = (option) => {
+    if(!clicked){
+    showAnswerSymbol('correct', 'incorrect', 'incorrect');
+    option.style.backgroundColor = 'white';
+    option.style.color = 'black';
+
+    gsap.to(explanation, {
+        autoAlpha: 1,
+        duration: 0.5,
+        y : '-=10',
+    });
+
+    clicked = true;
+}}
+
+option1.addEventListener('click', chooseAnswer.bind(null, option1));
+option2.addEventListener('click', chooseAnswer.bind(null, option2));
+option3.addEventListener('click', chooseAnswer.bind(null, option3));
 
 const time = new YUKA.Time();
 

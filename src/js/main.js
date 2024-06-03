@@ -6,6 +6,9 @@ import { DRACOLoader } from 'three/examples/jsm/Addons.js';
 import * as skeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { BLUEVEHICLESPATHS, REDVEHICLESPATHS, YELLOWVEHICLESPATHS } from './constants';
 
+const startbtn = document.querySelector('.header button');
+const startTitle = document.querySelector('.header h1');
+
 const progressBar = document.getElementById('progress-bar');
 const progressBarContainer = document.querySelector('.progress-bar-container');
 const loadingManager = new THREE.LoadingManager();
@@ -131,6 +134,27 @@ loader.load('../../static/blue.glb', (glb)=>{
     const v4 = createCar(model, BLUEVEHICLESPATHS[3], entityManager, Math.PI / 2);
     const v5 = createCar(model, BLUEVEHICLESPATHS[4], entityManager, Math.PI);
 });
+
+//gsap timeline
+startbtn.addEventListener('mousedown', ()=>{
+     const t1 = gsap.timeline();
+     t1.to(startbtn,{
+        autoAlpha: 0,
+        duration: 0.5,
+        y : '-=20',
+     }).to(startTitle, {
+        autoAlpha: 0,
+        duration: 1,
+        y : '-=20',
+     },0).to(camera.position, {
+        z: 144,
+        duration: 4,
+     },0).to(camera.rotation,{
+        x : -0.4,
+        duration: 4,
+     },0)
+});
+
 
 const time = new YUKA.Time();
 

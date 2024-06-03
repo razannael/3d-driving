@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import * as YUKA from 'yuka';
 import gsap from 'gsap';
-import { GLTFLoader } from 'three/examples/jsm/Addons.js';
+import { GLTFLoader, SkeletonUtils } from 'three/examples/jsm/Addons.js';
 import { DRACOLoader } from 'three/examples/jsm/Addons.js';
 import * as skeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { BLUEVEHICLESPATHS, REDVEHICLESPATHS, YELLOWVEHICLESPATHS } from './constants';
@@ -155,6 +155,39 @@ startbtn.addEventListener('mousedown', ()=>{
      },0)
 });
 
+
+loader.load('../../static/arrow.glb', (glb)=>{
+    const model = glb.scene;
+    const createArrow = (position, yRotation = 0) => {
+        const arrow = SkeletonUtils.clone(model);
+        arrow.position.copy(position);
+        arrow.rotation.y = yRotation;
+        scene.add(arrow);
+    }
+
+    createArrow(new THREE.Vector3(5.91, 2, 125.92), Math.PI);
+    createArrow(new THREE.Vector3(6.21, 2, 30.19), 0.5 * Math.PI);
+    createArrow(new THREE.Vector3(93.03, 2, 24.50), Math.PI);
+    createArrow(new THREE.Vector3(102.50, 2, -66), -0.5 * Math.PI);
+    createArrow(new THREE.Vector3(11.86, 2, -75.86), Math.PI);
+    createArrow(new THREE.Vector3(5.97, 2, -161.04), -0.5 * Math.PI);
+    createArrow(new THREE.Vector3(-82.82, 2, -171.17), -Math.PI / 2);
+
+    //Arrows for red cars
+    createArrow(new THREE.Vector3(1.38, 2, 109.32), 0.5 * Math.PI);
+    createArrow(new THREE.Vector3(1.13, 2, 14.01), 0.5 * Math.PI);
+    createArrow(new THREE.Vector3(107.50, 2, 20.33), Math.PI);
+    createArrow(new THREE.Vector3(97.45, 2, -81.35));
+    createArrow(new THREE.Vector3(-3.55, 2, -71.24), Math.PI);
+    createArrow(new THREE.Vector3(1.45, 2, -175.84), -0.5 * Math.PI);
+    createArrow(new THREE.Vector3(-98.74, 2, -166.74), Math.PI / 2);
+
+    //Arrows for blue cars
+    createArrow(new THREE.Vector3(-3.55, 2, 119.5), 0.5 * Math.PI);
+    createArrow(new THREE.Vector3(-4.08, 2, 24.64), 0.5 * Math.PI);
+    createArrow(new THREE.Vector3(98.08, 2, 14.95));
+    createArrow(new THREE.Vector3(93.599, 2, -70.83), Math.PI);
+    createArrow(new THREE.Vector3(-88.88, 2, -160.78), Math.PI);});
 
 const time = new YUKA.Time();
 

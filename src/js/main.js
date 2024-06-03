@@ -9,6 +9,22 @@ import { BLUEVEHICLESPATHS, REDVEHICLESPATHS, YELLOWVEHICLESPATHS } from './cons
 const startbtn = document.querySelector('.header button');
 const startTitle = document.querySelector('.header h1');
 
+const explanation = document.querySelector('.explanation');
+const nextQuestionBtn = document.querySelector('.explanation button');
+const question = document.querySelector('.questions p');
+
+const option1 = document.getElementById('option1');
+const option2 = document.getElementById('option2');
+const option3 = document.getElementById('option3');
+
+const option1Symbol = document.getElementById('a1-symbol');
+const option2Symbol = document.getElementById('a2-symbol');
+const option3Symbol = document.getElementById('a3-symbol');
+
+const option1Text = document.getElementById('a1-text');
+const option2Text = document.getElementById('a2-text');
+const option3Text = document.getElementById('a3-text');
+
 const progressBar = document.getElementById('progress-bar');
 const progressBarContainer = document.querySelector('.progress-bar-container');
 const loadingManager = new THREE.LoadingManager();
@@ -152,7 +168,19 @@ startbtn.addEventListener('mousedown', ()=>{
      },0).to(camera.rotation,{
         x : -0.4,
         duration: 4,
-     },0)
+     },0).to(question,{
+        autoAlpha: 1,
+        duration: 0.2,
+     },'+=0.7').to(option1,{
+         rotateX: 0,
+         duration: 0.2,
+     },'+=2.5').to(option2,{
+         rotateX: 0,
+         duration: 0.2,
+     },'+=2.4').to(option3,{
+         rotateX: 0,
+         duration: 0.2,
+     },'+=2.4')
 });
 
 

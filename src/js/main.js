@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { GLTFLoader, SkeletonUtils } from 'three/examples/jsm/Addons.js';
 import { DRACOLoader } from 'three/examples/jsm/Addons.js';
 import * as skeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
-import { BLUEVEHICLESPATHS, REDVEHICLESPATHS, YELLOWVEHICLESPATHS } from './constants';
+import { ANSWERSTEXT, BLUEVEHICLESPATHS, REDVEHICLESPATHS, YELLOWVEHICLESPATHS } from './constants';
 
 const startbtn = document.querySelector('.header button');
 const startTitle = document.querySelector('.header h1');
@@ -36,6 +36,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 let clicked = false; // to track if user has clicked an option
+let questionNumber = 1;
+let cameraX = 3;
+let cameraZ = 144;
 
 // set the color of the background
 renderer.setClearColor(0x94DBFB);
@@ -174,16 +177,16 @@ startbtn.addEventListener('mousedown', ()=>{
      },0).to(question,{
         autoAlpha: 1,
         duration: 0.1,
-     },'+=0.7').to(option1,{
+     },'+=0.5').to(option1,{
          rotateX: 0,
          duration: 0.1,
-     },'+=2').to(option2,{
+     },'+=1').to(option2,{
          rotateX: 0,
          duration: 0.1,
-     },'+=2').to(option3,{
+     },'+=1').to(option3,{
          rotateX: 0,
          duration: 0.1,
-     },'+=2')
+     },'+=1')
 });
 
 
@@ -245,6 +248,121 @@ const chooseAnswer = (option) => {
 option1.addEventListener('click', chooseAnswer.bind(null, option1));
 option2.addEventListener('click', chooseAnswer.bind(null, option2));
 option3.addEventListener('click', chooseAnswer.bind(null, option3));
+
+const changeColors = () => {
+    option1.style.backgroundColor = 'black';
+    option1.style.color = 'white';
+
+    option2.style.backgroundColor = 'black';
+    option2.style.color = 'white';
+
+    option3.style.backgroundColor = 'black';
+    option3.style.color = 'white';
+
+    option1Symbol.style.backgroundImage = '';
+    option2Symbol.style.backgroundImage = '';
+    option3Symbol.style.backgroundImage = '';
+}
+
+
+const changeOptionsText = (ques, opt1, opt2, opt3) => {
+    question.textContent = ques;
+    option1Text.textContent = opt1;
+    option2Text.textContent = opt2;
+    option3Text.textContent = opt3;
+}
+
+nextQuestionBtn.addEventListener('click', () => {
+    questionNumber++;
+    switch(questionNumber){
+        case 2:
+            cameraZ = 51;
+            break;
+        case 3:
+            cameraX = 100;
+            break;
+        case 4:
+            cameraZ = -45;
+            break;
+        case 5:
+            cameraX = 4;
+            break;
+        case 6:
+            cameraZ = -145;
+            break;
+        case 7:
+            cameraX = -91;
+            cameraZ = -140;
+            nextQuestionBtn.disabled = true;
+            break;
+        default:
+            break;
+    }
+
+
+
+    const tl = gsap.timeline();
+    tl.to(camera.position, {
+        x: cameraX,
+        z: cameraZ,
+        duration: 4
+    })
+    .to(question, {
+        autoAlpha: 0,
+        duration: 0.2
+    }, 0)
+    .to(explanation, {
+        autoAlpha: 0,
+        y: '+=10',
+        duration: 0.5
+    }, 0)
+    .to(option1, {
+        rotateX: 90,
+        duration: 0.2
+    }, '-=3.7')
+    .to(option2, {
+        rotateX: 90,
+        duration: 0.2
+    }, '-=3.5')
+    .to(option3, {
+        rotateX: 90,
+        duration: 0.2,
+        onComplete: function() {
+            changeColors();
+            changeOptionsText(
+                ANSWERSTEXT[questionNumber - 1].question,
+                ANSWERSTEXT[questionNumber - 1].answer1,
+                ANSWERSTEXT[questionNumber - 1].answer2,
+                ANSWERSTEXT[questionNumber - 1].answer3
+            );
+        }
+    }, '-=3.3')
+    .to(question, {
+        autoAlpha: 1,
+        duration: 0.2,
+        onComplete: function() {
+        }
+    }, '-=0.5')
+    .to(option1, {
+        rotateX: 0,
+        duration: 0.2,
+        onComplete: function() {
+        }
+    }, '+=2.5')
+    .to(option2, {
+        rotateX: 0,
+        duration: 0.2,
+        onComplete: function() {
+        }
+    }, '+=2.4')
+    .to(option3, {
+        rotateX: 0,
+        duration: 0.2,
+        onComplete: function() {
+            clicked = false;
+        }
+    }, '+=2.4')
+});
 
 const time = new YUKA.Time();
 

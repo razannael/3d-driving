@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { GLTFLoader, SkeletonUtils } from 'three/examples/jsm/Addons.js';
 import { DRACOLoader } from 'three/examples/jsm/Addons.js';
 import * as skeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
-import { ANSWERSTEXT, BLUEVEHICLESPATHS, REDVEHICLESPATHS, YELLOWVEHICLESPATHS } from './constants';
+import { ANSWERSTEXT, BLUEVEHICLESPATHS, REDVEHICLESPATHS, WHEELS, YELLOWVEHICLESPATHS } from './constants';
 
 const startbtn = document.querySelector('.header button');
 const startTitle = document.querySelector('.header h1');
@@ -242,11 +242,23 @@ const showAnswerSymbol = (opt1, opt2, opt3)=>{
 }
 
 const animateCar = (delay, car, wheels, last) => {
-    setTimeout(()=>{
+    setTimeout(() => {
         car.vehicle.steering.behaviors[1].active = true;
-        if(last){
+
+        gsap.to(car.modelGroup.getObjectByName(wheels.frontRight).rotation, {
+            x: '+=60',
+            duration: 20
+        });
+        gsap.to(car.modelGroup.getObjectByName(wheels.frontLeft).rotation, {
+            x: '+=60',
+            duration: 20
+        });
+        gsap.to(car.modelGroup.getObjectByName(wheels.back).rotation, {
+            x: '+=60',
+            duration: 20
+        });
+        if(last)
             carToAnimate++;
-        }
     }, delay)
 }
 
@@ -255,45 +267,73 @@ const chooseAnswer = (option) => {
         switch (carToAnimate) {
             case 0:
                 showAnswerSymbol('correct', 'incorrect', 'incorrect');
-                animateCar(3000, yellowCars[carToAnimate], null);
-                animateCar(5000, redCars[carToAnimate], null, true);
-                animateCar(0, blueCars[carToAnimate], null);
+                animateCar(3000, yellowCars[carToAnimate], WHEELS.yellowCar);
+                animateCar(5000, redCars[carToAnimate], WHEELS.redCar, true);
+                animateCar(0, blueCars[carToAnimate], WHEELS.blueCar);
+                // if(option.id === 'option1') {
+                //     scoreVal++;
+                //     score.innerText = scoreVal;
+                // }
                 break;
             case 1:
                 showAnswerSymbol('correct', 'incorrect', 'incorrect');
-                animateCar(3000, yellowCars[carToAnimate], null);
-                animateCar(5000, redCars[carToAnimate], null, true);
-                animateCar(0, blueCars[carToAnimate], null);
+                animateCar(3000, yellowCars[carToAnimate], WHEELS.yellowCar);
+                animateCar(5000, redCars[carToAnimate], WHEELS.redCar, true);
+                animateCar(0, blueCars[carToAnimate], WHEELS.blueCar);
+                // if(option.id === 'option1') {
+                //     scoreVal++;
+                //     score.innerText = scoreVal;
+                // }
                 break;
             case 2:
                 showAnswerSymbol('incorrect', 'incorrect', 'correct');
-                animateCar(3000, yellowCars[carToAnimate], null);
-                animateCar(0, redCars[carToAnimate], null);
-                animateCar(5000, blueCars[carToAnimate], null, true);
-                break;  
+                animateCar(3000, yellowCars[carToAnimate], WHEELS.yellowCar);
+                animateCar(0, redCars[carToAnimate], WHEELS.redCar);
+                animateCar(5000, blueCars[carToAnimate], WHEELS.blueCar, true);
+                // if(option.id === 'option3') {
+                //     scoreVal++;
+                //     score.innerText = scoreVal;
+                // }
+                break;
             case 3:
                 showAnswerSymbol('correct', 'incorrect', 'incorrect');
-                animateCar(5000, yellowCars[carToAnimate], null, true);
-                animateCar(3000, redCars[carToAnimate], null);
-                animateCar(0, blueCars[carToAnimate], null);
+                animateCar(5000, yellowCars[carToAnimate], WHEELS.yellowCar, true);
+                animateCar(3000, redCars[carToAnimate], WHEELS.redCar);
+                animateCar(0, blueCars[carToAnimate], WHEELS.blueCar);
+                // if(option.id === 'option1') {
+                //     scoreVal++;
+                //     score.innerText = scoreVal;
+                // }
                 break;
             case 4:
                 showAnswerSymbol('incorrect', 'correct', 'incorrect');
-                animateCar(0, yellowCars[carToAnimate], null);
-                animateCar(3000, redCars[carToAnimate], null, true);
+                animateCar(0, yellowCars[carToAnimate], WHEELS.yellowCar);
+                animateCar(3000, redCars[carToAnimate], WHEELS.redCar, true);
                 //animateCar(0, blueCars[carToAnimate], null);
+                // if(option.id === 'option2') {
+                //     scoreVal++;
+                //     score.innerText = scoreVal;
+                // }
                 break;
             case 5:
                 showAnswerSymbol('correct', 'incorrect', 'incorrect');
-                animateCar(3000, yellowCars[carToAnimate], null, true);
-                animateCar(0, redCars[carToAnimate], null);
+                animateCar(3000, yellowCars[carToAnimate], WHEELS.yellowCar, true);
+                animateCar(0, redCars[carToAnimate], WHEELS.redCar);
                 //animateCar(0, blueCars[carToAnimate], null);
+                // if(option.id === 'option1') {
+                //     scoreVal++;
+                //     score.innerText = scoreVal;
+                // }
                 break;
             case 6:
                 showAnswerSymbol('incorrect', 'correct', 'incorrect');
-                animateCar(3000, yellowCars[carToAnimate], null, true);
-                animateCar(3000, redCars[carToAnimate], null);
-                animateCar(0, blueCars[carToAnimate - 2], null);
+                animateCar(3000, yellowCars[carToAnimate], WHEELS.yellowCar, true);
+                animateCar(3000, redCars[carToAnimate], WHEELS.redCar);
+                animateCar(0, blueCars[carToAnimate - 2], WHEELS.blueCar);
+                // if(option.id === 'option2') {
+                //     scoreVal++;
+                //     score.innerText = scoreVal;
+                // }
                 break;
             default:
                 break;

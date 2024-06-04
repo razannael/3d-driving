@@ -40,6 +40,13 @@ let questionNumber = 1;
 let cameraX = 3;
 let cameraZ = 144;
 
+
+const yellowCars = [];
+const redCars = [];
+const blueCars = [];
+
+let carToAnimate = 0; // counter for the car to animate
+
 // set the color of the background
 renderer.setClearColor(0x94DBFB);
 
@@ -58,10 +65,10 @@ camera.position.set(3, 10,218);
 camera.lookAt(scene.position);
 
 
-const ambientLight = new THREE.AmbientLight(0xE1E1E1, 0.3);
+const ambientLight = new THREE.AmbientLight(0xE1E1E1, 0.8);
 scene.add(ambientLight);
 
-const hemisphereLight = new THREE.HemisphereLight(0x94D8FB, 0x9CFF2E, 0.3);
+const hemisphereLight = new THREE.HemisphereLight(0x94D8FB, 0x9CFF2E, 0.7);
 scene.add(hemisphereLight);
 
 const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.7);
@@ -110,7 +117,7 @@ const createCar =(model, path, entityManager, yRotation)=>{
    onPathBehavior.radius = 0.1;
 
    v.position.copy(path.current());
-   v.maxSpeed = 5;
+   v.maxSpeed = 15;
    v.steering.add(onPathBehavior);
    v.steering.add(followPathBehavior);
 
@@ -133,6 +140,8 @@ loader.load('../../static/SUV.glb', (glb)=>{
     const v5 = createCar(model, YELLOWVEHICLESPATHS[4], entityManager, - Math.PI / 2);
     const v6 = createCar(model, YELLOWVEHICLESPATHS[5], entityManager, Math.PI);
     const v7 = createCar(model, YELLOWVEHICLESPATHS[6], entityManager, - Math.PI / 2);
+    yellowCars.push(v1, v2, v3, v4, v5, v6, v7);
+
 });
 
 loader.load('../../static/red.glb', (glb)=>{
@@ -144,6 +153,7 @@ loader.load('../../static/red.glb', (glb)=>{
     const v5 = createCar(model, REDVEHICLESPATHS[4], entityManager, Math.PI / 2);
     const v6 = createCar(model, REDVEHICLESPATHS[5], entityManager, 0);
     const v7 = createCar(model, REDVEHICLESPATHS[6], entityManager, Math.PI / 2);
+    redCars.push(v1, v2, v3, v4, v5, v6, v7);
 });
 
 loader.load('../../static/blue.glb', (glb)=>{
@@ -153,6 +163,7 @@ loader.load('../../static/blue.glb', (glb)=>{
     const v3 = createCar(model, BLUEVEHICLESPATHS[2], entityManager, 0);
     const v4 = createCar(model, BLUEVEHICLESPATHS[3], entityManager, Math.PI / 2);
     const v5 = createCar(model, BLUEVEHICLESPATHS[4], entityManager, Math.PI);
+    blueCars.push(v1, v2, v3, v4, v5);
 });
 
 
@@ -230,9 +241,63 @@ const showAnswerSymbol = (opt1, opt2, opt3)=>{
     option3Symbol.style.backgroundImage = `url(../../static/symbols/${opt3}.png)`;
 }
 
+const animateCar = (delay, car, wheels, last) => {
+    setTimeout(()=>{
+        car.vehicle.steering.behaviors[1].active = true;
+        if(last){
+            carToAnimate++;
+        }
+    }, delay)
+}
+
 const chooseAnswer = (option) => {
     if(!clicked){
-    showAnswerSymbol('correct', 'incorrect', 'incorrect');
+        switch (carToAnimate) {
+            case 0:
+                showAnswerSymbol('correct', 'incorrect', 'incorrect');
+                animateCar(3000, yellowCars[carToAnimate], null);
+                animateCar(5000, redCars[carToAnimate], null, true);
+                animateCar(0, blueCars[carToAnimate], null);
+                break;
+            case 1:
+                showAnswerSymbol('correct', 'incorrect', 'incorrect');
+                animateCar(3000, yellowCars[carToAnimate], null);
+                animateCar(5000, redCars[carToAnimate], null, true);
+                animateCar(0, blueCars[carToAnimate], null);
+                break;
+            case 2:
+                showAnswerSymbol('incorrect', 'incorrect', 'correct');
+                animateCar(3000, yellowCars[carToAnimate], null);
+                animateCar(0, redCars[carToAnimate], null);
+                animateCar(5000, blueCars[carToAnimate], null, true);
+                break;  
+            case 3:
+                showAnswerSymbol('correct', 'incorrect', 'incorrect');
+                animateCar(5000, yellowCars[carToAnimate], null, true);
+                animateCar(3000, redCars[carToAnimate], null);
+                animateCar(0, blueCars[carToAnimate], null);
+                break;
+            case 4:
+                showAnswerSymbol('incorrect', 'correct', 'incorrect');
+                animateCar(0, yellowCars[carToAnimate], null);
+                animateCar(3000, redCars[carToAnimate], null, true);
+                //animateCar(0, blueCars[carToAnimate], null);
+                break;
+            case 5:
+                showAnswerSymbol('correct', 'incorrect', 'incorrect');
+                animateCar(3000, yellowCars[carToAnimate], null, true);
+                animateCar(0, redCars[carToAnimate], null);
+                //animateCar(0, blueCars[carToAnimate], null);
+                break;
+            case 6:
+                showAnswerSymbol('incorrect', 'correct', 'incorrect');
+                animateCar(3000, yellowCars[carToAnimate], null, true);
+                animateCar(3000, redCars[carToAnimate], null);
+                animateCar(0, blueCars[carToAnimate - 2], null);
+                break;
+            default:
+                break;
+        }
     option.style.backgroundColor = 'white';
     option.style.color = 'black';
 
